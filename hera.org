@@ -1,0 +1,120 @@
+* hera
+:properties:
+:header-args: :tangle yes
+:end:
+
+Hera (/ˈhɛrə, ˈhɪərə/; Greek: Ἥρᾱ Hērā, equivalently Ἥρη Hērē, in Ionic and Homer) is
+the goddess of women and marriage in Greek mythology and religion. She is the
+daughter of the Titans Cronus and Rhea.
+
+Slain by Hercules, Hera created the [[https://github.com/abo-abo/hydra][Hydra]] constellation.
+
+This code allows the registration of major-mode specific hydras, a default entrypoint
+hydra, and the support for stack-based hydra navigation!
+
+** dependencies
+#+begin_src emacs-lisp
+  ;; (use-package ht)
+  (require 'ht)
+
+  ;; (use-package dash)
+  (require 'dash)
+#+end_src
+
+** config
+*** hera-default-hydra
+#+begin_src emacs-lisp
+  ;; the hydra body to run if no major mode specific hydra is set
+  (defvar hera-default-hydra nil)
+#+end_src
+
+** private
+*** hera--hydras
+#+begin_src emacs-lisp
+  ;; this is an alist of major mode -> hydra body
+  (defvar hera--hydras (ht))
+#+end_src
+
+*** hera--stack
+#+begin_src emacs-lisp
+  ;; this is a FIFO list of hydra bodies
+  (defvar hera--stack nil)
+#+end_src
+
+*** hera--first-body
+#+begin_src emacs-lisp
+  ;; return the hydra body for the current major-mode, or hera-entrypoint
+  (defun hera--first-body ()
+    (let ((current-hydra (assoc major-mode hera-hydras)))
+      (if current-hydra (second current-hydra)
+        hera-default-hydra)))
+#+end_src
+
+** public
+*** hera-register
+#+begin_src emacs-lisp
+  (defun hera-register (major-mode hydra-body)
+    (ht-set! hera--hydras major-mode hydra-body))
+#+end_src
+
+*** hera-push
+#+begin_src emacs-lisp
+  (defun hera-push (hydra-body)
+    (setq hera--stack (-cons* hydra-body hera--stack))
+    (call-interactively hydra-body))
+#+end_src
+
+*** hera-pop
+#+begin_src emacs-lisp
+  (defun hera-pop ()
+    (if (length hera--stack)
+        (cl-destructuring-bind (hydra-body rest) (-split-at 1 hera--stack)
+          (setq hera--stack rest)
+          (when hydra-body
+            (call-interactively (car hydra-body))))
+      (hydra--body-exit)))
+#+end_src
+
+*** hera-run
+#+begin_src emacs-lisp
+  ;; execute the hydra body for the current mode, or the default one
+  (defun hera-run ()
+    (interactive)
+    (let ((context (hera--first-body)))
+      (when context (funcall context))))
+
+  ;; bind hera-run
+  (global-set-key (kbd "<f19>") 'hera-run)
+  (global-set-key (kbd "C-<f19>") 'hera-pop)
+#+end_src
+
+** tests
+:properties:
+:header-args: :tangle no
+:end:
+*** tmp/hydra-a
+ #+begin_src emacs-lisp
+   (defhydra tmp/hydra-a (:color blue)
+     ("<f19>" (hera-pop))
+     ("b" (hera-push 'tmp/hydra-b/body))
+     ("c" (hera-push 'tmp/hydra-c/body)))
+#+end_src
+
+*** tmp/hydra-b
+ #+begin_src emacs-lisp
+   (defhydra tmp/hydra-b (:color blue)
+     ("<f19>" (hera-pop))
+     ("c" (hera-push 'tmp/hydra-c/body)))
+#+end_src
+
+*** tmp/hydra-c
+ #+begin_src emacs-lisp
+   (defhydra tmp/hydra-c (:color blue)
+     ("<f19>" (hera-pop))
+     ("b" (hera-push 'tmp/hydra-b/body)))
+#+end_src
+
+*** test
+#+begin_src emacs-lisp
+(hera-push 'tmp/hydra-a/body)
+#+end_src
