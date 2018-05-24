@@ -1,7 +1,19 @@
-(use-package ht)
-(require 'ht)
+;;; hera.el --- Hera for Gydra
+;; Copyright (C) 2018 Dustin Lacewell
 
-(use-package dash)
+;; Author: Dustin Lacewell <dlacewell@gmail.com>
+;; Version: 0.1
+;; Package-Requires: (ht dash)
+;; Keywords: hydra
+;; URL: http://github.com/dustinlacewell/hera
+
+;;; Commentary:
+
+;; This package is awesome!
+
+;;; Code:
+
+(require 'ht)
 (require 'dash)
 
 ;; the hydra body to run if no major mode specific hydra is set
