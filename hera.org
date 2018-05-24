@@ -105,3 +105,11 @@
 (hera-push 'tmp/hydra-a/body)
 #+end_src
 
+* Provide
+:properties:
+:header-args: :tangle yes
+:end:
+#+begin_src emacs-lisp
+  (provide 'hera)
+#+end_src
+

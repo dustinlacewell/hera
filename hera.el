@@ -39,3 +39,5 @@
   (interactive)
   (let ((context (hera--first-body)))
     (when context (funcall context))))
+
+(provide 'hera)
