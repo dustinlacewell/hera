@@ -1,7 +1,7 @@
-;; (use-package ht)
+(use-package ht)
 (require 'ht)
 
-;; (use-package dash)
+(use-package dash)
 (require 'dash)
 
 ;; the hydra body to run if no major mode specific hydra is set
@@ -15,8 +15,8 @@
 
 ;; return the hydra body for the current major-mode, or hera-entrypoint
 (defun hera--first-body ()
-  (let ((current-hydra (assoc major-mode hera-hydras)))
-    (if current-hydra (second current-hydra)
+  (let ((current-hydra (ht-get hera-hydras major-mode)))
+    (if current-hydra (call-interactively current-hydra)
       hera-default-hydra)))
 
 (defun hera-register (major-mode hydra-body)
@@ -39,7 +39,3 @@
   (interactive)
   (let ((context (hera--first-body)))
     (when context (funcall context))))
-
-;; bind hera-run
-(global-set-key (kbd "<f19>") 'hera-run)
-(global-set-key (kbd "C-<f19>") 'hera-pop)

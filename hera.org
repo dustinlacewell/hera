@@ -4,10 +4,10 @@
 :end:
 ** dependencies
 #+begin_src emacs-lisp
-  ;; (use-package ht)
+  (use-package ht)
   (require 'ht)
 
-  ;; (use-package dash)
+  (use-package dash)
   (require 'dash)
 #+end_src
 
