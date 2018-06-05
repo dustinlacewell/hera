@@ -3,16 +3,14 @@
 
 ;; Author: Dustin Lacewell <dlacewell@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: (ht dash)
+;; Package-Requires: (hydra ht dash)
 ;; Keywords: hydra
 ;; URL: http://github.com/dustinlacewell/hera
 
 ;;; Commentary:
 
 ;; This package is awesome!
-
-;;; Code:
-
+(require 'hydra)
 (require 'ht)
 (require 'dash)
 
