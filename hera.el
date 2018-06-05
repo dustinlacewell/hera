@@ -25,7 +25,7 @@
 
 ;; return the hydra body for the current major-mode, or hera-entrypoint
 (defun hera--first-body ()
-  (let ((current-hydra (ht-get hera-hydras major-mode)))
+  (let ((current-hydra (ht-get hera--hydras major-mode)))
     (if current-hydra (call-interactively current-hydra)
       hera-default-hydra)))
 
