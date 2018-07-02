@@ -16,6 +16,8 @@
   ;;; Commentary:
 
   ;; This package is awesome!
+
+  ;;; Code:
   (require 'hydra)
   (require 'ht)
   (require 'dash)
@@ -125,5 +127,6 @@
 :end:
 #+begin_src emacs-lisp
   (provide 'hera)
+  ;;; hera.el ends here
 #+end_src
 

@@ -10,6 +10,8 @@
 ;;; Commentary:
 
 ;; This package is awesome!
+
+;;; Code:
 (require 'hydra)
 (require 'ht)
 (require 'dash)
@@ -51,3 +53,4 @@
     (when context (funcall context))))
 
 (provide 'hera)
+;;; hera.el ends here
