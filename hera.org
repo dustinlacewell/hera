@@ -9,7 +9,7 @@
 
   ;; Author: Dustin Lacewell <dlacewell@gmail.com>
   ;; Version: 0.1
-  ;; Package-Requires: (hydra ht dash)
+  ;; Package-Requires: ((emacs "24") (hydra "0") (ht "0") (dash "0"))
   ;; Keywords: hydra
   ;; URL: http://github.com/dustinlacewell/hera
 
