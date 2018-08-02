@@ -1,44 +1,55 @@
 * Hera
 
-Hera (/ˈhɛrə, ˈhɪərə/; Greek: Ἥρᾱ Hērā, equivalently Ἥρη Hērē, in Ionic and Homer) is
-the goddess of women and marriage in Greek mythology and religion. She is the
-daughter of the Titans Cronus and Rhea.
-
-Slain by Hercules, Hera created the [[https://github.com/abo-abo/hydra][Hydra]] constellation.
-
-This package provides three major features:
-
-- Register major-mode specific Hydras
-- Designate a default Hydra
-- A stack-based API for nested Hydras
+This package provides a simple mechanism for nesting Hydras
 
 ** api
-
-*** hera-register MAJOR-MODE HYDRA-BODY
-
-Register HYDRA-BODY as the Hydra for MAJOR-MODE.
-
 *** hera-push HYDRA-BODY
 
-Push HYDRA-BODY onto the Hera stack, then execute it.
+Push current (if any) Hydra onto the stack and execute HYDRA-BODY.
 
 *** hera-pop
 
-Pop a Hydra from the Hera stack, then execute it. Close Hydra if stack is empty.
+Execute the Hydra ontop of the stack (if any).
 
-*** hera-run
+*** hera-start HYDRA-BODY
 
-Execute the Hydra for the current major-mode or =hera-default-hydra=
+Execute HYDRA-BODY after clearing the stack.
 
-** configuration
+** example
+Here are three Hydras, =hydra-a=, =hydra-b=, =hydra-c=.
 
-*** hera-default-hydra
+Notice that heads that exit call =(hera-pop)= so any stacked Hydras will be re-shown.
 
-The default Hydra body when none is specified for the current major-mode.
+Notice also how when using =(hera-push)= the head always specifies =:exit t=. This is
+very important.
 
-*** keybindings
+Use =(hera-start)= to execute the first Hydra with a fresh stack.
 
+*** hydra-a
+ #+begin_src emacs-lisp
+   (defhydra hydra-a (:color blue)
+     ("SPC" (hera-pop) "exit" :exit t)
+     ("b" (hera-push 'hydra-b/body) :exit t)
+     ("c" (hera-push 'hydra-c/body) :exit t))
+#+end_src
+
+*** hydra-b
+ #+begin_src emacs-lisp
+   (defhydra hydra-b (:color blue)
+     ("SPC" (hera-pop) "exit" :exit t)
+     ("c" (hera-push 'hydra-c/body) :exit t))
+#+end_src
+
+*** hydra-c
+ #+begin_src emacs-lisp
+   (defhydra hydra-c (:color blue)
+     ("SPC" (hera-pop) "exit" :exit t)
+     ("b" (hera-push 'hydra-b/body) :exit t))
+#+end_src
+
+*** test
 #+begin_src emacs-lisp
-(global-set-key (kbd "<f19>") 'hera-run)
-(global-set-key (kbd "C-<f19>") 'hera-pop)
+  (defun hera-test ()
+    (interactive)
+    (hera-start 'hydra-a/body))
 #+end_src

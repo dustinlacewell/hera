@@ -45,6 +45,13 @@
         (call-interactively x))))
 #+end_src
 
+*** hera-start
+#+begin_src emacs-lisp
+  (defun hera-start (hydra-body)
+    (setq hera--stack nil)
+    (call-interactively hydra-body))
+#+end_src
+
 ** tests
 :properties:
 :header-args: :tangle no
@@ -75,7 +82,7 @@
 #+begin_src emacs-lisp
   (defun hera-test ()
     (interactive)
-    (tmp/hydra-a/body))
+    (hera-start 'hera--test-hydra-a/body))
 #+end_src
 
 * Provide

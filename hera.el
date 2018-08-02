@@ -27,5 +27,9 @@
     (when x
       (call-interactively x))))
 
+(defun hera-start (hydra-body)
+  (setq hera--stack nil)
+  (call-interactively hydra-body))
+
 (provide 'hera)
 ;;; hera.el ends here
